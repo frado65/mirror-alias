@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore di Abbinamenti di Parole</title>
+</head>
+<body>
+    <h1>Generatore di Abbinamenti di Parole</h1>
+    <input type="text" id="sentence" placeholder="Inserisci una frase">
+    <button onclick="generateCombinations()">Genera Abbinamenti</button>
+    <div id="output"></div>
+
+    <script>
+        function generateCombinations() {
+            const sentence = document.getElementById('sentence').value;
+            const words = sentence.split(' ');
+            const combinations = getCombinations(words);
+            document.getElementById('output').innerHTML = combinations.join('<br>');
+        }
+
+        function getCombinations(arr) {
+            let result = [];
+
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = i + 1; j < arr.length + 1; j++) {
+                    result.push(arr.slice(i, j).join(' '));
+                }
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
