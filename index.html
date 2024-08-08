@@ -18,6 +18,7 @@
             <button onclick="removeShortWords(4)">Remove Short <=4</button>
             <button onclick="removeDuplicates()">Remove Duplicates</button>
             <button onclick="makePalindromic()">Palindromic</button>
+            <button onclick="copyToClipboard()">Copy</button>
         </div>
         <textarea id="outputSentence" class="textbox" placeholder="Risultato" readonly></textarea>
     </div>
@@ -75,6 +76,15 @@
             const palindrome = uniqueWords.concat(uniqueWords.slice(0, -1).reverse()).join(' ');
 
             document.getElementById('outputSentence').value = palindrome;
+        }
+
+        // Funzione per copiare il testo della seconda textbox nella clipboard
+        function copyToClipboard() {
+            const outputText = document.getElementById('outputSentence');
+            outputText.select();
+            outputText.setSelectionRange(0, 99999); // Per dispositivi mobili
+            document.execCommand("copy");
+            alert("Copiato nella clipboard: " + outputText.value);
         }
     </script>
 </body>
