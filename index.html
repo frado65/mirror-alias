@@ -3,31 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generatore di Abbinamenti di Parole</title>
+    <title>Generatore di Frasi Palindrome</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Generatore di Abbinamenti di Parole</h1>
-    <input type="text" id="sentence" placeholder="Inserisci una frase">
-    <button onclick="generateCombinations()">Genera Abbinamenti</button>
-    <div id="output"></div>
+    <div class="container">
+        <h1>Generatore di Frasi Palindrome</h1>
+        <textarea id="inputSentence" class="textbox" placeholder="Inserisci una frase"></textarea>
+        <div class="button-container">
+            <button onclick="pasteClipboard()">Paste</button>
+            <button onclick="resetFields()">Reset</button>
+            <button onclick="removePunctuation()">Remove Punctuation Marks</button>
+            <button onclick="removeShortWords(3)">Remove Short <=3</button>
+            <button onclick="removeShortWords(4)">Remove Short <=4</button>
+            <button onclick="removeDuplicates()">Remove Duplicates</button>
+            <button onclick="makePalindromic()">Palindromic</button>
+        </div>
+        <textarea id="outputSentence" class="textbox" placeholder="Risultato" readonly></textarea>
+    </div>
 
     <script>
-        function generateCombinations() {
-            const sentence = document.getElementById('sentence').value;
-            const words = sentence.split(' ');
-            const combinations = getCombinations(words);
-            document.getElementById('output').innerHTML = combinations.join('<br>');
+        // Funzione per incollare il contenuto della clipboard nei campi di input
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('inputSentence').value = text;
+                document.getElementById('outputSentence').value = text;
+            } catch (err) {
+                console.error('Failed to read clipboard contents: ', err);
+            }
         }
 
-        function getCombinations(arr) {
-            let result = [];
+        // Funzione per resettare il campo di output con il contenuto dell'input
+        function resetFields() {
+            const inputText = document.getElementById('inputSentence').value;
+            document.getElementById('outputSentence').value = inputText;
+        }
 
-            for (let i = 0; i < arr.length; i++) {
-                for (let j = i + 1; j < arr.length + 1; j++) {
-                    result.push(arr.slice(i, j).join(' '));
-                }
-            }
-            return result;
+        // Funzione per rimuovere i segni di punteggiatura
+        function removePunctuation() {
+            const output = document.getElementById('outputSentence').value;
+            const cleanedOutput = output.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+            document.getElementById('outputSentence').value = cleanedOutput;
+        }
+
+        // Funzione per rimuovere parole corte
+        function removeShortWords(length) {
+            const output = document.getElementById('outputSentence').value;
+            const words = output.split(' ');
+            const filteredWords = words.filter(word => word.length > length);
+            document.getElementById('outputSentence').value = filteredWords.join(' ');
+        }
+
+        // Funzione per rimuovere parole duplicate
+        function removeDuplicates() {
+            const output = document.getElementById('outputSentence').value;
+            const words = output.split(' ');
+            const uniqueWords = [...new Set(words)];
+            document.getElementById('outputSentence').value = uniqueWords.join(' ');
+        }
+
+        // Funzione per rendere la frase palindroma
+        function makePalindromic() {
+            const output = document.getElementById('outputSentence').value;
+            const words = output.split(' ');
+
+            // Rimuovi duplicati
+            const uniqueWords = [...new Set(words)];
+
+            // Crea la frase palindroma senza duplicare la parola centrale
+            const palindrome = uniqueWords.concat(uniqueWords.slice(0, -1).reverse()).join(' ');
+
+            document.getElementById('outputSentence').value = palindrome;
         }
     </script>
 </body>
